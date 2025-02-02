@@ -1,9 +1,9 @@
-import { selectGraphData } from "@/store/slices";
+import { selectNodesWithModifications } from "@/store/slices";
 import { AppDispatch } from "@/store/store";
 import { GraphState } from "@/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 const fetchGraphData = createAsyncThunk<{ data: GraphState }>(
   "graph/fetchGraphData",
@@ -30,7 +30,7 @@ const useGetGraphData = () => {
     const promise = dispatch(fetchGraphData());
     return () => promise.abort();
   }, [dispatch]);
-  return useSelector(selectGraphData);
+  return useSelector(selectNodesWithModifications, shallowEqual);
 };
 
-export { useGetGraphData, fetchGraphData };
+export { fetchGraphData, useGetGraphData };

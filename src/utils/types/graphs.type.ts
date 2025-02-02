@@ -5,6 +5,7 @@ export interface Node {
     label: string;
     color: string;
     fontSize: number;
+    backgroundColor?: string;
   };
   type: string;
 }

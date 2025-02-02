@@ -4,4 +4,8 @@
   --color-primary: #006ad3;
 }
 
+.react-flow__controls-button {
+  width: 52px !important;
+  height: 40px !important;
+}
 /* ... */

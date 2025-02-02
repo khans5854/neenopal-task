@@ -1,8 +1,10 @@
+import { useGetGraphData } from "@/api/graph";
 import { Background, Controls, MiniMap, ReactFlow } from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import { ContextMenu } from "../context-menu";
 import { useReactFlow } from "./hooks";
 import { NodeCustomizationPanel } from "./node-customization-panel";
-import { useGetGraphData } from "@/api/graph";
-import "@xyflow/react/dist/style.css";
+import { UndoRedoControls } from "./undo-redo-controls";
 
 const nodeTypes = {
   selectorNode: NodeCustomizationPanel,
@@ -10,21 +12,36 @@ const nodeTypes = {
 
 export const ReactFlowComponent = () => {
   const { graphData } = useGetGraphData();
-  const { handleNodesChange, onConnect } = useReactFlow();
+  const {
+    handleNodesChange,
+    onConnect,
+    onPaneClick,
+    onNodeContextMenu,
+    menu,
+    ref,
+    onEdgeDoubleClick,
+  } = useReactFlow();
 
   return (
     <div className="w-screen h-screen">
       <ReactFlow
+        ref={ref}
         nodes={graphData.nodes}
         edges={graphData.edges}
         onNodesChange={handleNodesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        onPaneClick={onPaneClick}
+        onNodeContextMenu={onNodeContextMenu}
+        onEdgeDoubleClick={onEdgeDoubleClick}
         fitView
       >
-        <Controls />
+        <Controls>
+          <UndoRedoControls />
+        </Controls>
         <MiniMap />
         <Background gap={12} size={1} />
+        {menu && <ContextMenu onClick={onPaneClick} {...menu} />}
       </ReactFlow>
     </div>
   );

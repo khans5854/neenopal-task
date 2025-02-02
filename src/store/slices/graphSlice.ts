@@ -43,6 +43,11 @@ const graphSlice = createSlice({
     addEdge: (state, action: PayloadAction<Edge>) => {
       state.graphData.edges.push(action.payload);
     },
+    removeEdge: (state, action: PayloadAction<string>) => {
+      state.graphData.edges = state.graphData.edges.filter(
+        (edge) => edge.id !== action.payload,
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchGraphData.pending, (state) => {
@@ -60,9 +65,28 @@ const graphSlice = createSlice({
   },
 });
 
-export const { updateNodePosition, addEdge } = graphSlice.actions;
+export const { updateNodePosition, addEdge, removeEdge } = graphSlice.actions;
 export const selectGraphData = (state: RootState) => state.graph;
 export const selectNodes = (state: RootState) => state.graph.graphData.nodes;
-export const selectEdges = (state: RootState) => state.graph.graphData.edges;
+export const selectNodeById = (id: string) => (state: RootState) =>
+  state.graph.graphData.nodes.find((node) => node.id === id);
+export const selectNodesWithModifications = (state: RootState) => {
+  const edges = state.graph.graphData?.edges;
+  const nodes = state.graph.graphData?.nodes;
+  const nodeColors = state.nodeStyling.nodeColors;
+  const nodeBgColors = state.nodeStyling.nodeBgColors;
+  const nodeFontSizes = state.nodeStyling.nodeFontSizes;
+  const modifiedNodes = nodes?.map((node) => ({
+    ...node,
+    data: {
+      ...node.data,
+      ...(nodeColors[node.id] && { color: nodeColors[node.id] }),
+      ...(nodeBgColors[node.id] && { backgroundColor: nodeBgColors[node.id] }),
+      ...(nodeFontSizes[node.id] && { fontSize: nodeFontSizes[node.id] }),
+    },
+  }));
+
+  return { graphData: { edges, nodes: modifiedNodes } };
+};
 
 export default graphSlice.reducer;
