@@ -1,7 +1,7 @@
-import { ReactFlowComponent } from "@/components";
+import { GraphContainer } from "@/components";
 
 function App() {
-  return <ReactFlowComponent />;
+  return <GraphContainer />;
 }
 
 export default App;

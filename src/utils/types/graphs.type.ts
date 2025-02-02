@@ -6,32 +6,25 @@ export interface Node {
     color: string;
     fontSize: number;
   };
+  type: string;
 }
 
 export interface Edge {
   id: string;
   source: string;
   target: string;
+  type?: string;
 }
 
 export interface Action {
   type: string;
   payload: string;
 }
-
-export interface State {
-  nodes: Node[];
-  edges: Edge[];
-}
-export interface HistoryState {
-  past: Action[];
-  present: State;
-  future: Action[];
-}
-
-export interface Params {
-  source: string;
-  sourceHandle: string | null;
-  target: string;
-  targetHandle: string | null;
+export interface GraphState {
+  graphData: {
+    nodes: Node[];
+    edges: Edge[];
+  };
+  isLoading: boolean;
+  error: string | null;
 }

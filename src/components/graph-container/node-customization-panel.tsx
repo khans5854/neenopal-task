@@ -4,18 +4,25 @@ import { Handle, Position } from "@xyflow/react";
 interface NodeCustomizationPanelProps<T> {
   readonly data: T;
   readonly isConnectable: boolean;
+  readonly id: string;
 }
 
 export function NodeCustomizationPanel<T extends Node["data"]>({
   data,
   isConnectable,
+  id,
 }: NodeCustomizationPanelProps<T>) {
+  const handleClick = () => {
+    console.log("clicked", id);
+  };
   return (
-    <div className="bg-white rounded-md py-1 px-4 border border-black">
+    <button
+      className="bg-white rounded-md py-1 px-4 border  border-black focus:border-3 focus:border-primary"
+      onClick={handleClick}
+    >
       <Handle
         type="target"
         position={Position.Top}
-        onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={isConnectable}
       />
       <div
@@ -30,6 +37,6 @@ export function NodeCustomizationPanel<T extends Node["data"]>({
         id="a"
         isConnectable={isConnectable}
       />
-    </div>
+    </button>
   );
 }
