@@ -1,5 +1,13 @@
 import { updateGraphData, updateNodeStyling } from "@/store/slices";
-import { getCurrentState, getLastState, getNextState, isRedoable, isUndoable, redoState, undoState } from "@/store/slices/historySlice";
+import {
+  getCurrentState,
+  getLastState,
+  getNextState,
+  isRedoable,
+  isUndoable,
+  redoState,
+  undoState,
+} from "@/store/slices/historySlice";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 

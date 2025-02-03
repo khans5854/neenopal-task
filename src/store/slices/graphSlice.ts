@@ -1,5 +1,5 @@
 import { fetchGraphData } from "@/api/graph";
-import { Edge, GraphState } from "@/utils";
+import { Edge, GraphState, NodePosition } from "@/utils";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
@@ -33,16 +33,20 @@ const graphSlice = createSlice({
     // Updates the position of a specific node
     updateNodePosition: (
       state,
-      action: PayloadAction<{ id: string; position: { x: number; y: number } }>,
+      action: PayloadAction<{ id: string; position: NodePosition }>,
     ) => {
-      const node = state.graphData.nodes.find((n) => n.id === action.payload.id);
+      const node = state.graphData.nodes.find(
+        (n) => n.id === action.payload.id,
+      );
       if (node) {
         node.position = action.payload.position;
       }
     },
     // Adds a new edge if it doesn't already exist
     addEdge: (state, action: PayloadAction<Edge>) => {
-      if (!state.graphData.edges.find((edge) => edge.id === action.payload.id)) {
+      if (
+        !state.graphData.edges.find((edge) => edge.id === action.payload.id)
+      ) {
         state.graphData.edges.push(action.payload);
       }
     },
@@ -64,7 +68,8 @@ const graphSlice = createSlice({
   },
 });
 
-export const { updateNodePosition, addEdge, removeEdge, updateGraphData } = graphSlice.actions;
+export const { updateNodePosition, addEdge, removeEdge, updateGraphData } =
+  graphSlice.actions;
 
 // Selector to get the entire graph state
 export const selectGraphData = (state: RootState) => state.graph;
@@ -84,10 +89,13 @@ export const selectNodeById = (id: string) =>
 
 // Complex selector that combines nodes with their styling modifications
 export const selectNodesWithModifications = createSelector(
-  [selectEdges, selectNodes,
-   (state: RootState) => state.nodeStyling.nodeColors,
-   (state: RootState) => state.nodeStyling.nodeBgColors,
-   (state: RootState) => state.nodeStyling.nodeFontSizes],
+  [
+    selectEdges,
+    selectNodes,
+    (state: RootState) => state.nodeStyling.nodeColors,
+    (state: RootState) => state.nodeStyling.nodeBgColors,
+    (state: RootState) => state.nodeStyling.nodeFontSizes,
+  ],
   (edges, nodes, nodeColors, nodeBgColors, nodeFontSizes) => {
     if (!nodes.length) return { graphData: { edges, nodes: [] } };
 

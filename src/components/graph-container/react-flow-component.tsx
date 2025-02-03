@@ -1,29 +1,29 @@
-import { useGetGraphData } from "@/api/graph";
+import { useContextMenu, useReactFlow } from "@/hooks";
 import { Background, Controls, MiniMap, ReactFlow } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { ContextMenu } from "../context-menu";
 import { NodeCustomizationPanel } from "./node-customization-panel";
 import { UndoRedoControls } from "./undo-redo-controls";
-import { useReactFlow } from "@/hooks";
 
 const nodeTypes = {
   selectorNode: NodeCustomizationPanel,
 };
 
 export const ReactFlowComponent = () => {
-  // Fetch graph data (nodes and edges) from API
-  const { graphData } = useGetGraphData();
-
   // Custom hook that provides graph interaction handlers
   const {
-    handleNodesChange,  // Handler for node modifications (position, deletion, etc.)
-    onConnect,         // Handler for creating new edge connections
-    onPaneClick,      // Handler for clicks on the graph canvas
-    onNodeContextMenu, // Handler for right-click context menu on nodes
-    menu,             // State for context menu position and content
-    ref,              // Reference to the ReactFlow instance
+    graphData,
+    handleNodesChange, // Handler for node modifications (position, deletion, etc.)
+    onConnect, // Handler for creating new edge connections
     onEdgeDoubleClick, // Handler for double-clicking edges
   } = useReactFlow();
+
+  const {
+    menu, // State for context menu position and content
+    ref, // Reference to the ReactFlow instance
+    onNodeContextMenu, // Handler for right-click context menu on nodes
+    onPaneClick, // Handler for clicks on the graph canvas
+  } = useContextMenu();
 
   return (
     <div className="w-screen h-screen">
@@ -37,10 +37,10 @@ export const ReactFlowComponent = () => {
         onPaneClick={onPaneClick}
         onNodeContextMenu={onNodeContextMenu}
         onEdgeDoubleClick={onEdgeDoubleClick}
-        fitView  // Automatically fits the graph view to show all nodes
+        fitView // Automatically fits the graph view to show all nodes
       >
         <Controls>
-        {/* Graph controls including undo/redo functionality */}
+          {/* Graph controls including undo/redo functionality */}
           <UndoRedoControls />
         </Controls>
         {/* Minimap for graph overview */}

@@ -17,7 +17,7 @@ export const UndoRedoControls = () => {
       <ControlButton disabled={isUndoDisabled} onClick={undo}>
         <UndoIcon />
       </ControlButton>
-      
+
       {/* Redo button - disabled when there's nothing to redo */}
       <ControlButton disabled={isRedoDisabled} onClick={redo}>
         <RedoIcon />
@@ -25,6 +25,3 @@ export const UndoRedoControls = () => {
     </>
   );
 };
-
-
-

@@ -21,14 +21,23 @@ const historySlice = createSlice({
     // Saves current state to history and clears any future states
     pushState: (
       state,
-      action: PayloadAction<{ graph: GraphState; nodeStyling: NodeStylingState }>
+      action: PayloadAction<{
+        graph: GraphState;
+        nodeStyling: NodeStylingState;
+      }>,
     ) => {
       state.past.push(action.payload);
       state.future = []; // Clear redo stack when new action is performed
     },
 
     // Moves current state to future and removes last state from past
-    undoState: (state, action: PayloadAction<{ graph: GraphState; nodeStyling: NodeStylingState }>) => {
+    undoState: (
+      state,
+      action: PayloadAction<{
+        graph: GraphState;
+        nodeStyling: NodeStylingState;
+      }>,
+    ) => {
       if (state.past.length === 0) return; // Prevent undo if no history exists
 
       state.future.unshift(action.payload);
@@ -36,11 +45,17 @@ const historySlice = createSlice({
     },
 
     // Moves most recent future state back to past
-    redoState: (state, action: PayloadAction<{ graph: GraphState; nodeStyling: NodeStylingState }>) => {
+    redoState: (
+      state,
+      action: PayloadAction<{
+        graph: GraphState;
+        nodeStyling: NodeStylingState;
+      }>,
+    ) => {
       if (state.future.length === 0) return; // Prevent redo if no future states exist
 
-      state.past.push(action.payload); 
-      state.future.shift(); 
+      state.past.push(action.payload);
+      state.future.shift();
     },
   },
 });
@@ -60,19 +75,19 @@ const selectNodeStyling = (state: RootState) => state.nodeStyling;
 // selector to get current combined state
 export const getCurrentState = createSelector(
   [selectGraph, selectNodeStyling],
-  (graph, nodeStyling) => ({ graph, nodeStyling })
+  (graph, nodeStyling) => ({ graph, nodeStyling }),
 );
 
 // selector to get the last state from history
 export const getLastState = createSelector(
   [(state: RootState) => state.history.past],
-  (past) => past.length > 0 ? past[past.length - 1] : null
+  (past) => (past.length > 0 ? past[past.length - 1] : null),
 );
 
 // selector to get the next state from future
 export const getNextState = createSelector(
   [(state: RootState) => state.history.future],
-  (future) => future.length > 0 ? future[0] : null 
+  (future) => (future.length > 0 ? future[0] : null),
 );
 
 export default historySlice.reducer;

@@ -1,30 +1,20 @@
+import { useDebounce } from "@/hooks/use-debounce";
 import {
   selectNodeById,
   selectNodeFontSizes,
   updateNodeFontSize,
 } from "@/store/slices";
-import { DEFAULT_NODE_FONT_SIZE, NODE_FONT_SIZES } from "@/utils";
-import { FC, useMemo } from "react";
+import {
+  DEBOUNCE_DELAY,
+  DEFAULT_NODE_FONT_SIZE,
+  NODE_FONT_SIZES,
+} from "@/utils";
+import { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
-  // Get the font sizes for all nodes from Redux store
-  const nodeFontSizes = useSelector(selectNodeFontSizes);
+  const { fontSize, setFontSize } = useFontSizeControl({ id });
 
-  // Get the specific node by ID from Redux store
-  const node = useSelector(selectNodeById(id));
-
-  const dispatch = useDispatch();
-  
-  // Calculate the effective font size for this node:
-  // 1. First check nodeFontSizes map
-  // 2. Then fallback to node's data.fontSize
-  // 3. Finally fallback to default font size
-  const fontSize = useMemo(
-    () => nodeFontSizes[id] ?? node?.data?.fontSize ?? DEFAULT_NODE_FONT_SIZE,
-    [nodeFontSizes, id, node?.data?.fontSize],
-  );
-  
   return (
     <div className="flex items-center gap-2">
       <label
@@ -41,8 +31,7 @@ export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
         value={fontSize}
         onChange={(e) => {
           const newFontSize = Number(e.target.value);
-          // Dispatch action to update font size in Redux store
-          dispatch(updateNodeFontSize({ nodeId: id, fontSize: newFontSize }));
+          setFontSize(newFontSize);
         }}
         onClick={(e) => {
           // Prevent click event from bubbling up to parent elements
@@ -53,4 +42,30 @@ export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
       <span className="text-lg text-gray-600">{fontSize}px</span>
     </div>
   );
+};
+
+const useFontSizeControl = ({ id }: { id: string }) => {
+  // Get the font sizes for all nodes from Redux store
+  const nodeFontSizes = useSelector(selectNodeFontSizes);
+
+  // Get the specific node by ID from Redux store
+  const node = useSelector(selectNodeById(id));
+
+  // Calculate the effective font size for this node:
+  // 1. First check nodeFontSizes map
+  // 2. Then fallback to node's data.fontSize
+  // 3. Finally fallback to default font size
+  const [fontSize, setFontSize] = useState(
+    nodeFontSizes[id] ?? node?.data?.fontSize ?? DEFAULT_NODE_FONT_SIZE,
+  );
+
+  const dispatch = useDispatch();
+
+  const debouncedFontSize = useDebounce(fontSize, DEBOUNCE_DELAY);
+
+  useEffect(() => {
+    dispatch(updateNodeFontSize({ nodeId: id, fontSize: debouncedFontSize }));
+  }, [debouncedFontSize, dispatch, id]);
+
+  return { fontSize, setFontSize };
 };

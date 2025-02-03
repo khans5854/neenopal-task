@@ -34,3 +34,13 @@ export interface NodeStylingState {
   nodeBgColors: { [nodeId: string]: string };
   nodeFontSizes: { [nodeId: string]: number };
 }
+
+export interface NodePosition {
+  x: number;
+  y: number;
+}
+
+export interface HistoricalState {
+  graph: GraphState;
+  nodeStyling: NodeStylingState;
+}
