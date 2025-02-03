@@ -2,9 +2,9 @@ import { useGetGraphData } from "@/api/graph";
 import { Background, Controls, MiniMap, ReactFlow } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { ContextMenu } from "../context-menu";
-import { useReactFlow } from "./hooks";
 import { NodeCustomizationPanel } from "./node-customization-panel";
 import { UndoRedoControls } from "./undo-redo-controls";
+import { useReactFlow } from "@/hooks";
 
 const nodeTypes = {
   selectorNode: NodeCustomizationPanel,
@@ -12,6 +12,7 @@ const nodeTypes = {
 
 export const ReactFlowComponent = () => {
   const { graphData } = useGetGraphData();
+
   const {
     handleNodesChange,
     onConnect,

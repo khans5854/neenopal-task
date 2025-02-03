@@ -11,13 +11,18 @@ import { useDispatch, useSelector } from "react-redux";
 
 export const ColorPicker: FC<{ id: string }> = ({ id }) => {
   const node = useSelector(selectNodeById(id));
+
   const nodeColors = useSelector(selectNodeColors);
+
   const nodeBgColors = useSelector(selectNodeBgColors);
+
   const dispatch = useDispatch();
+
   const finalColor = useMemo(
     () => nodeColors[id] ?? node?.data?.color ?? DEFAULT_NODE_COLOR,
     [nodeColors, id, node?.data?.color],
   );
+  
   const finalBgColor = useMemo(
     () =>
       nodeBgColors[id] ?? node?.data?.backgroundColor ?? DEFAULT_NODE_BG_COLOR,

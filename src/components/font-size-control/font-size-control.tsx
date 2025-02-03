@@ -9,12 +9,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
   const nodeFontSizes = useSelector(selectNodeFontSizes);
+
   const node = useSelector(selectNodeById(id));
+
   const dispatch = useDispatch();
+  
   const fontSize = useMemo(
     () => nodeFontSizes[id] ?? node?.data?.fontSize ?? DEFAULT_NODE_FONT_SIZE,
     [nodeFontSizes, id, node?.data?.fontSize],
   );
+  
   return (
     <div className="flex items-center gap-2">
       <label

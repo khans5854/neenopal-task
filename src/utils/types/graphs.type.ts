@@ -27,5 +27,10 @@ export interface GraphState {
     edges: Edge[];
   };
   isLoading: boolean;
-  error: string | null;
+}
+
+export interface NodeStylingState {
+  nodeColors: { [nodeId: string]: string };
+  nodeBgColors: { [nodeId: string]: string };
+  nodeFontSizes: { [nodeId: string]: number };
 }

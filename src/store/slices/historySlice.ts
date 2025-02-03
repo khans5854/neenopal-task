@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { GraphState, NodeStylingState } from "@/utils";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 interface HistoryState {
-  past: string[];
-  present: string;
-  future: string[];
+  past: { graph: GraphState; nodeStyling: NodeStylingState }[];
+  future: { graph: GraphState; nodeStyling: NodeStylingState }[];
 }
 
 const initialState: HistoryState = {
   past: [],
-  present: "",
   future: [],
 };
 
@@ -16,29 +16,51 @@ const historySlice = createSlice({
   name: "history",
   initialState,
   reducers: {
-    undo: (state) => {
-      if (state.past.length > 0) {
-        const previousState = state.past[state.past.length - 1];
-        state.future = [state.present, ...state.future];
-        state.present = previousState;
-        state.past = state.past.slice(0, -1);
-      }
+    pushState: (
+      state,
+      action: PayloadAction<{ graph: GraphState; nodeStyling: NodeStylingState }>
+    ) => {
+      state.past.push(action.payload);
+      state.future = []; 
     },
-    redo: (state) => {
-      if (state.future.length > 0) {
-        const nextState = state.future[0];
-        state.past = [...state.past, state.present];
-        state.present = nextState;
-        state.future = state.future.slice(1);
-      }
+
+    undoState: (state, action: PayloadAction<{ graph: GraphState; nodeStyling: NodeStylingState }>) => {
+      if (state.past.length === 0) return; 
+
+      state.future.unshift(action.payload);
+      state.past.pop();
     },
-    recordAction: (state, action: PayloadAction<string>) => {
-      state.past = [...state.past, state.present];
-      state.present = action.payload;
-      state.future = [];
+
+    redoState: (state, action: PayloadAction<{ graph: GraphState; nodeStyling: NodeStylingState }>) => {
+      if (state.future.length === 0) return; 
+
+      state.past.push(action.payload); 
+      state.future.shift(); 
     },
   },
 });
 
-export const { undo, redo, recordAction } = historySlice.actions;
+export const { pushState, redoState, undoState } = historySlice.actions;
+
+export const isUndoable = (state: RootState) => state.history.past.length > 0;
+export const isRedoable = (state: RootState) => state.history.future.length > 0;
+
+const selectGraph = (state: RootState) => state.graph;
+const selectNodeStyling = (state: RootState) => state.nodeStyling;
+
+export const getCurrentState = createSelector(
+  [selectGraph, selectNodeStyling],
+  (graph, nodeStyling) => ({ graph, nodeStyling })
+);
+
+export const getLastState = createSelector(
+  [(state: RootState) => state.history.past],
+  (past) => past.length > 0 ? past[past.length - 1] : null
+);
+
+export const getNextState = createSelector(
+  [(state: RootState) => state.history.future],
+  (future) => future.length > 0 ? future[0] : null 
+);
+
 export default historySlice.reducer;
