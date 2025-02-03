@@ -22,10 +22,12 @@ const isNodePositionValid = (change: NodePositionChange): boolean =>
   );
 
 export const useReactFlow = () => {
+  // State and refs for managing context menu and container reference
   const [menu, setMenu] = useState<ContextMenuProps | null>(null);
   const ref = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
 
+  // Handles node position updates in the graph
   const handleNodesChange = useCallback(
     (changes: NodeChange[]) => {
       changes.forEach((change) => {
@@ -37,14 +39,18 @@ export const useReactFlow = () => {
     [dispatch],
   );
 
+  // Removes an edge when double-clicked
   const onEdgeDoubleClick = useCallback((_: MouseEvent, edge: Edge) => {
     dispatch(removeEdge(edge.id));
   }, [dispatch]);
 
+  // Creates a new edge connection between nodes
   const onConnect = useCallback((params: Connection) => {
     dispatch(addEdge({ ...params, id: uuidv4() }));
   }, [dispatch]);
 
+  // Handles right-click context menu for nodes
+  // Positions the menu based on available space in the viewport
   const onNodeContextMenu = useCallback((event: MouseEvent, node: Node) => {
     event.preventDefault();
     const pane = ref.current?.getBoundingClientRect();
@@ -59,8 +65,10 @@ export const useReactFlow = () => {
     });
   }, []);
 
+  // Closes the context menu when clicking on the pane
   const onPaneClick = useCallback(() => setMenu(null), []);
 
+  // Return hook values and event handlers
   return {
     handleNodesChange,
     onConnect,

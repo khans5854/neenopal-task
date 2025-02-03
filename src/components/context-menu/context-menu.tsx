@@ -3,6 +3,15 @@ import { useMemo } from "react";
 import { ColorPicker } from "../color-picker";
 import { FontSizeControl } from "../font-size-control";
 
+/**
+ * ContextMenu component that provides color and font size controls
+ * Positioning is controlled by top/left/right/bottom props
+ * @param id - Unique identifier for the target element
+ * @param top - Top position value or boolean
+ * @param left - Left position value or boolean
+ * @param right - Right position value or boolean
+ * @param bottom - Bottom position value or boolean
+ */
 export function ContextMenu({
   id,
   top,
@@ -11,6 +20,8 @@ export function ContextMenu({
   bottom,
   ...props
 }: Readonly<ContextMenuProps>) {
+  // Calculate positioning style, converting boolean values to undefined
+  // and falling back to "auto" if value is not provided
   const style = useMemo(() => {
     return {
       top: typeof top === "boolean" ? undefined : (top ?? "auto"),
