@@ -1,7 +1,12 @@
-import { GraphContainer } from "@/components";
+import { Drawer, GraphContainer } from "@/components";
 
 function App() {
-  return <GraphContainer />;
+  return (
+    <>
+      <GraphContainer />
+      <Drawer />
+    </>
+  );
 }
 
 export default App;

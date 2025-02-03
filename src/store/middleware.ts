@@ -13,12 +13,10 @@ export const TRACKED_ACTIONS = [
   "graph/removeEdge",
   "nodeStyling/updateNodeTextColor",
   "nodeStyling/updateNodeBgColor",
-] as const;
-
-export const DEBOUNCE_TRACKED_ACTIONS = [
-  "graph/updateNodePosition",
   "nodeStyling/updateNodeFontSize",
 ] as const;
+
+export const DEBOUNCE_TRACKED_ACTIONS = ["graph/updateNodePosition"] as const;
 
 export type TrackedAction = (typeof TRACKED_ACTIONS)[number];
 
@@ -44,6 +42,7 @@ export const historyMiddleware: Middleware<
   if (TRACKED_ACTIONS.includes((action as Action).type as TrackedAction)) {
     // Get the current state before the action is processed
     const currentState = store.getState();
+
     // Create a historical snapshot of relevant state slices
     const historicalState = {
       graph: currentState.graph,

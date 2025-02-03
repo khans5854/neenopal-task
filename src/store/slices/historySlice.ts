@@ -7,11 +7,13 @@ interface HistoryState {
   past: { graph: GraphState; nodeStyling: NodeStylingState }[];
   // Stores states that were undone for redo functionality
   future: { graph: GraphState; nodeStyling: NodeStylingState }[];
+  history: { infoText: string }[];
 }
 
 const initialState: HistoryState = {
   past: [],
   future: [],
+  history: [],
 };
 
 const historySlice = createSlice({
@@ -57,10 +59,14 @@ const historySlice = createSlice({
       state.past.push(action.payload);
       state.future.shift();
     },
+    pushHistory: (state, action: PayloadAction<{ infoText: string }>) => {
+      state.history.push(action.payload);
+    },
   },
 });
 
-export const { pushState, redoState, undoState } = historySlice.actions;
+export const { pushState, redoState, undoState, pushHistory } =
+  historySlice.actions;
 
 // Selector to check if undo operation is available
 export const isUndoable = (state: RootState) => state.history.past.length > 0;
