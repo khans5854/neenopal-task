@@ -12,7 +12,7 @@ export function NodeCustomizationPanel<T extends Node["data"]>({
 }: NodeCustomizationPanelProps<T>) {
   return (
     <div
-      className="bg-white rounded-md py-1 px-4 border border-gray-400 hover:bg-gray-100"
+      className="bg-white rounded-xs py-1 px-4 border border-gray-400 hover:bg-gray-100"
       style={{ backgroundColor: data.backgroundColor }}
     >
       <Handle
@@ -21,7 +21,7 @@ export function NodeCustomizationPanel<T extends Node["data"]>({
         isConnectable={isConnectable}
       />
       <div
-        className="text-center font-bold"
+        className="text-center font-medium"
         style={{ fontSize: data.fontSize, color: data.color }}
       >
         {data.label}

@@ -16,7 +16,7 @@ export const Drawer = () => {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed top-4 right-4 bg-primary text-white p-4 rounded-md flex items-center gap-2 [&>svg]:fill-white cursor-pointer"
+        className="fixed top-4 right-4 bg-primary text-white px-4 py-2 rounded-md flex items-center gap-2 [&>svg]:fill-white cursor-pointer"
       >
         <TrackChangesIcon />
         <span>Track Changes</span>

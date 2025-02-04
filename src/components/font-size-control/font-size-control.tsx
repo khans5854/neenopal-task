@@ -1,19 +1,27 @@
-import { useDebounce } from "@/hooks/use-debounce";
 import {
   selectNodeById,
   selectNodeFontSizes,
   updateNodeFontSize,
 } from "@/store/slices";
 import {
-  DEBOUNCE_DELAY,
   DEFAULT_NODE_FONT_SIZE,
-  NODE_FONT_SIZES,
+  NODE_FONT_SIZES
 } from "@/utils";
-import { FC, useEffect, useState } from "react";
+import { FC, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
-  const { fontSize, setFontSize } = useFontSizeControl({ id });
+  const nodeFontSizes = useSelector(selectNodeFontSizes);
+
+  const dispatch = useDispatch();
+
+  // Get the specific node by ID from Redux store
+  const node = useSelector(selectNodeById(id));
+
+  const fontSize = useMemo(
+    () => nodeFontSizes[id] ?? node?.data?.fontSize ?? DEFAULT_NODE_FONT_SIZE,
+    [id, nodeFontSizes, node?.data?.fontSize],
+  );
 
   return (
     <div className="flex items-center gap-2">
@@ -31,7 +39,7 @@ export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
         value={fontSize}
         onChange={(e) => {
           const newFontSize = Number(e.target.value);
-          setFontSize(newFontSize);
+          dispatch(updateNodeFontSize({ nodeId: id, fontSize: newFontSize }));
         }}
         onClick={(e) => {
           // Prevent click event from bubbling up to parent elements
@@ -44,28 +52,3 @@ export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
   );
 };
 
-const useFontSizeControl = ({ id }: { id: string }) => {
-  // Get the font sizes for all nodes from Redux store
-  const nodeFontSizes = useSelector(selectNodeFontSizes);
-
-  // Get the specific node by ID from Redux store
-  const node = useSelector(selectNodeById(id));
-
-  // Calculate the effective font size for this node:
-  // 1. First check nodeFontSizes map
-  // 2. Then fallback to node's data.fontSize
-  // 3. Finally fallback to default font size
-  const [fontSize, setFontSize] = useState(
-    nodeFontSizes[id] ?? node?.data?.fontSize ?? DEFAULT_NODE_FONT_SIZE,
-  );
-
-  const dispatch = useDispatch();
-
-  const debouncedFontSize = useDebounce(fontSize, DEBOUNCE_DELAY);
-
-  useEffect(() => {
-    dispatch(updateNodeFontSize({ nodeId: id, fontSize: debouncedFontSize }));
-  }, [debouncedFontSize, dispatch, id]);
-
-  return { fontSize, setFontSize };
-};

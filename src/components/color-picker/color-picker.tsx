@@ -1,4 +1,3 @@
-import { useDebounce } from "@/hooks";
 import {
   selectNodeBgColors,
   selectNodeById,
@@ -7,28 +6,41 @@ import {
   updateNodeTextColor,
 } from "@/store/slices";
 import {
-  DEBOUNCE_DELAY,
   DEFAULT_NODE_BG_COLOR,
-  DEFAULT_NODE_COLOR,
+  DEFAULT_NODE_COLOR
 } from "@/utils";
-import { ChangeEventHandler, FC, useEffect, useId, useState } from "react";
+import { ChangeEventHandler, FC, useId, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // ColorPicker component allows users to customize node text and background colors
 export const ColorPicker: FC<{ id: string }> = ({ id }) => {
-  const { finalColor, finalBgColor, setFinalColor, setFinalBgColor } =
-    useColorPicker({ id });
+  const node = useSelector(selectNodeById(id));
+  const nodeColors = useSelector(selectNodeColors);
+  const nodeBgColors = useSelector(selectNodeBgColors);
+  const dispatch = useDispatch();
+
+  // Calculate the final text color, falling back to defaults if not set
+  const finalColor = useMemo(
+    () => nodeColors[id] ?? node?.data?.color ?? DEFAULT_NODE_COLOR,
+    [id, nodeColors, node?.data?.color],
+  );
+
+  // Calculate the final background color, falling back to defaults if not set
+  const finalBgColor = useMemo(
+    () => nodeBgColors[id] ?? node?.data?.backgroundColor ?? DEFAULT_NODE_BG_COLOR,
+    [id, nodeBgColors, node?.data?.backgroundColor],
+  );
 
   return (
     <div className="flex flex-row gap-6">
       <ColorInput
         value={finalColor}
-        onChange={(e) => setFinalColor(e.target.value)}
+        onChange={(e) => dispatch(updateNodeTextColor({ nodeId: id, color: e.target.value }))}
         label="Color"
       />
       <ColorInput
         value={finalBgColor}
-        onChange={(e) => setFinalBgColor(e.target.value)}
+        onChange={(e) => dispatch(updateNodeBgColor({ nodeId: id, color: e.target.value }))}
         label="Background Color"
       />
     </div>
@@ -60,40 +72,4 @@ const ColorInput: FC<{
       />
     </div>
   );
-};
-
-const useColorPicker = ({ id }: { id: string }) => {
-  // Get the node and its current color settings from Redux store
-  const node = useSelector(selectNodeById(id));
-  const nodeColors = useSelector(selectNodeColors);
-  const nodeBgColors = useSelector(selectNodeBgColors);
-  const dispatch = useDispatch();
-
-  // Calculate the final text color, falling back to defaults if not set
-  const [finalColor, setFinalColor] = useState(
-    nodeColors[id] ?? node?.data?.color ?? DEFAULT_NODE_COLOR,
-  );
-
-  // Debounce the color change to prevent excessive updates
-  const debouncedColor = useDebounce(finalColor, DEBOUNCE_DELAY);
-
-  // Update the node text color when the debounced color changes
-  useEffect(() => {
-    dispatch(updateNodeTextColor({ nodeId: id, color: debouncedColor }));
-  }, [debouncedColor, dispatch, id]);
-
-  // Calculate the final background color, falling back to defaults if not set
-  const [finalBgColor, setFinalBgColor] = useState(
-    nodeBgColors[id] ?? node?.data?.backgroundColor ?? DEFAULT_NODE_BG_COLOR,
-  );
-
-  // Debounce the background color change to prevent excessive updates
-  const debouncedBgColor = useDebounce(finalBgColor, DEBOUNCE_DELAY);
-
-  // Update the node background color when the debounced background color changes
-  useEffect(() => {
-    dispatch(updateNodeBgColor({ nodeId: id, color: debouncedBgColor }));
-  }, [debouncedBgColor, dispatch, id]);
-
-  return { finalColor, finalBgColor, setFinalColor, setFinalBgColor };
 };

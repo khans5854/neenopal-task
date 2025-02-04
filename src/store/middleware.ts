@@ -11,12 +11,11 @@ import { pushState } from "./slices/historySlice";
 export const TRACKED_ACTIONS = [
   "graph/addEdge",
   "graph/removeEdge",
-  "nodeStyling/updateNodeTextColor",
-  "nodeStyling/updateNodeBgColor",
-  "nodeStyling/updateNodeFontSize",
+  
 ] as const;
 
-export const DEBOUNCE_TRACKED_ACTIONS = ["graph/updateNodePosition"] as const;
+export const DEBOUNCE_TRACKED_ACTIONS = ["graph/updateNodePosition","nodeStyling/updateNodeFontSize","nodeStyling/updateNodeTextColor",
+  "nodeStyling/updateNodeBgColor",] as const;
 
 export type TrackedAction = (typeof TRACKED_ACTIONS)[number];
 

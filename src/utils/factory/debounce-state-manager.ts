@@ -1,6 +1,6 @@
 import { pushState } from "@/store/slices";
 import { Dispatch, MiddlewareAPI, UnknownAction } from "@reduxjs/toolkit";
-import { debounce } from "../helping-function";
+import { debounce } from "../debounce";
 import { HistoricalState } from "../types";
 
 type StoreType<T> = MiddlewareAPI<Dispatch<UnknownAction>, T>;
