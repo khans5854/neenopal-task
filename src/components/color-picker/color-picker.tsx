@@ -62,7 +62,7 @@ const ColorInput: FC<{
 
   return (
     <div className="flex items-center gap-2">
-      <label htmlFor={id} className="text-lg font-medium text-gray-700">
+      <label htmlFor={id} className="text-base font-medium text-gray-700">
         {label}
       </label>
       <input

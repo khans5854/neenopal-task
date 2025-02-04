@@ -34,10 +34,12 @@ export function ContextMenu({
   return (
     <div
       style={style}
-      className="absolute bg-white rounded-md shadow-lg z-30 p-4 flex flex-col gap-6"
+      className="absolute bg-white rounded-md shadow-lg z-30 p-4 flex flex-col gap-4"
+      onClick={(e) => e.stopPropagation()}
       {...props}
     >
       <ColorPicker id={id} />
+      <div className="h-px bg-gray-300"></div>
       <FontSizeControl id={id} />
     </div>
   );

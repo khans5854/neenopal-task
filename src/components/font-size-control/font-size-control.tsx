@@ -26,7 +26,7 @@ export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
     <div className="flex items-center gap-2">
       <label
         htmlFor="font-size-slider"
-        className="text-lg font-medium text-gray-700"
+        className="text-base font-medium text-gray-700"
       >
         Font Size:
       </label>
@@ -46,7 +46,7 @@ export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
         }}
         className="w-44 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
       />
-      <span className="text-lg text-gray-600">{fontSize}px</span>
+      <span className="text-base text-gray-600">{fontSize}px</span>
     </div>
   );
 };

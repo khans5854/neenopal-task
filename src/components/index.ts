@@ -3,3 +3,4 @@ export * from "./font-size-control";
 export * from "./color-picker";
 export * from "./drawer";
 export * from "./timeline";
+export * from "./feature-dailog";

@@ -8,8 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "format": "prettier --write ./src",
-    "deploy" : "gh-pages -d dist"
+    "format": "prettier --write ./src"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",

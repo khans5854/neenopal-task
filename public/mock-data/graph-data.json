@@ -2,7 +2,7 @@
     "nodes": [
       {
         "id": "1",
-        "data": { "label": "Node 1", "color": "#ff0000", "fontSize": 16 },
+        "data": { "label": "Node 1", "color": "#ff0000", "fontSize": 18 },
         "position": { "x": 600, "y": 0 },
         "type": "selectorNode"
 
@@ -11,7 +11,7 @@
       {
         "id": "2",
         "type": "selectorNode",
-        "data": { "label": "Node 2", "color": "#000000", "fontSize": 14 },
+        "data": { "label": "Node 2", "color": "#ffffff", "backgroundColor": "#000000", "fontSize": 14 },
         "position": { "x": 300, "y": 100 }
       },
 
@@ -19,7 +19,7 @@
 
       {
         "id": "3",
-        "data": { "label": "Node 3", "color": "#000000", "fontSize": 14 },
+        "data": { "label": "Node 3", "color": "#2137e4", "fontSize": 14 },
         "position": { "x": 900, "y": 100 },
         "type": "selectorNode"
 

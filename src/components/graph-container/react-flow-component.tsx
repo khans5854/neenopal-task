@@ -48,7 +48,7 @@ export const ReactFlowComponent = () => {
         {/* Background grid pattern */}
         <Background gap={12} size={1} />
         {/* Context menu that appears on right-click */}
-        {menu && <ContextMenu onClick={onPaneClick} {...menu} />}
+        {menu && <ContextMenu {...menu} />}
       </ReactFlow>
     </div>
   );
