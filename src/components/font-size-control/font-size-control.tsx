@@ -3,21 +3,20 @@ import {
   selectNodeFontSizes,
   updateNodeFontSize,
 } from "@/store/slices";
-import {
-  DEFAULT_NODE_FONT_SIZE,
-  NODE_FONT_SIZES
-} from "@/utils";
+import { DEFAULT_NODE_FONT_SIZE, NODE_FONT_SIZES } from "@/utils";
 import { FC, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
   const nodeFontSizes = useSelector(selectNodeFontSizes);
 
+  // Dispatch actions to update node font sizes
   const dispatch = useDispatch();
 
   // Get the specific node by ID from Redux store
   const node = useSelector(selectNodeById(id));
 
+  // Calculate the final font size, falling back to defaults if not set
   const fontSize = useMemo(
     () => nodeFontSizes[id] ?? node?.data?.fontSize ?? DEFAULT_NODE_FONT_SIZE,
     [id, nodeFontSizes, node?.data?.fontSize],
@@ -51,4 +50,3 @@ export const FontSizeControl: FC<{ id: string }> = ({ id }) => {
     </div>
   );
 };
-

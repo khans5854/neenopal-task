@@ -5,18 +5,18 @@ import {
   updateNodeBgColor,
   updateNodeTextColor,
 } from "@/store/slices";
-import {
-  DEFAULT_NODE_BG_COLOR,
-  DEFAULT_NODE_COLOR
-} from "@/utils";
+import { DEFAULT_NODE_BG_COLOR, DEFAULT_NODE_COLOR } from "@/utils";
 import { ChangeEventHandler, FC, useId, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // ColorPicker component allows users to customize node text and background colors
 export const ColorPicker: FC<{ id: string }> = ({ id }) => {
+  // Selectors to get the node, node colors, and node background colors
   const node = useSelector(selectNodeById(id));
   const nodeColors = useSelector(selectNodeColors);
   const nodeBgColors = useSelector(selectNodeBgColors);
+
+  // Dispatch actions to update node colors and background colors
   const dispatch = useDispatch();
 
   // Calculate the final text color, falling back to defaults if not set
@@ -27,7 +27,8 @@ export const ColorPicker: FC<{ id: string }> = ({ id }) => {
 
   // Calculate the final background color, falling back to defaults if not set
   const finalBgColor = useMemo(
-    () => nodeBgColors[id] ?? node?.data?.backgroundColor ?? DEFAULT_NODE_BG_COLOR,
+    () =>
+      nodeBgColors[id] ?? node?.data?.backgroundColor ?? DEFAULT_NODE_BG_COLOR,
     [id, nodeBgColors, node?.data?.backgroundColor],
   );
 
@@ -35,12 +36,16 @@ export const ColorPicker: FC<{ id: string }> = ({ id }) => {
     <div className="flex flex-row gap-6">
       <ColorInput
         value={finalColor}
-        onChange={(e) => dispatch(updateNodeTextColor({ nodeId: id, color: e.target.value }))}
+        onChange={(e) =>
+          dispatch(updateNodeTextColor({ nodeId: id, color: e.target.value }))
+        }
         label="Color"
       />
       <ColorInput
         value={finalBgColor}
-        onChange={(e) => dispatch(updateNodeBgColor({ nodeId: id, color: e.target.value }))}
+        onChange={(e) =>
+          dispatch(updateNodeBgColor({ nodeId: id, color: e.target.value }))
+        }
         label="Background Color"
       />
     </div>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -6,10 +5,12 @@ import {
   DialogTitle,
   TransitionChild,
 } from "@headlessui/react";
+import { useState } from "react";
 import { CloseIcon, TrackChangesIcon } from "../icons";
-import { HistoryStack } from "../history-stack";
+import { Timeline } from "../timeline";
 
 export const Drawer = () => {
+  // State to control the drawer's open/close state
   const [open, setOpen] = useState(false);
 
   return (
@@ -39,16 +40,16 @@ export const Drawer = () => {
                     <button
                       type="button"
                       onClick={() => setOpen(false)}
-                      className="relative rounded-md cursor-pointer p-2 bg-gray-100 hover:bg-gray-200 text-gray-900 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+                      className="relative z-50 rounded-md cursor-pointer p-2 bg-gray-100 hover:bg-gray-200 text-gray-900 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
                     >
                       <CloseIcon />
                     </button>
                   </div>
                 </TransitionChild>
 
-                <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
-                  <div className="px-4 sm:px-6">
-                    <DialogTitle className="text-base font-semibold text-gray-900">
+                <div className="flex h-full flex-col overflow-y-scroll bg-white pb-6 shadow-xl">
+                  <div className=" pt-6 px-4 sm:px-6 sticky top-0 bg-white z-40">
+                    <DialogTitle className="text-base  font-semibold text-gray-900">
                       <p className="flex items-center gap-2 text-xl font-semibold">
                         <TrackChangesIcon />
                         <span>Track Changes</span>
@@ -56,7 +57,7 @@ export const Drawer = () => {
                     </DialogTitle>
                   </div>
                   <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                    <HistoryStack />
+                    <Timeline />
                   </div>
                 </div>
               </DialogPanel>

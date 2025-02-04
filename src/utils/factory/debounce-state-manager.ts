@@ -10,12 +10,18 @@ export function createDebounceStateManager<T>(waitTime: number = 300) {
   let initialHistoricalState: HistoricalState | null = null;
 
   // Create the debounced push state function
-  const debouncedPushState = debounce((store: StoreType<T>) => {
-    if (initialHistoricalState) {
-      store.dispatch(pushState(initialHistoricalState));
-      initialHistoricalState = null;
-    }
-  }, waitTime);
+  const debouncedPushState = debounce(
+    (store: StoreType<T>, callback?: () => void) => {
+      if (initialHistoricalState) {
+        store.dispatch(pushState(initialHistoricalState));
+        if (callback) {
+          callback();
+        }
+        initialHistoricalState = null;
+      }
+    },
+    waitTime,
+  );
 
   return {
     // Method to set initial state
@@ -26,8 +32,8 @@ export function createDebounceStateManager<T>(waitTime: number = 300) {
     },
 
     // Method to push state with debounce
-    pushDebouncedState(store: StoreType<T>) {
-      debouncedPushState(store);
+    pushDebouncedState(store: StoreType<T>, callback?: () => void) {
+      debouncedPushState(store, callback);
     },
 
     // Method to get current initial state

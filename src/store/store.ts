@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { undoRedoMiddleware } from "./middleware";
 import graphReducer from "./slices/graphSlice";
-import nodeStylingReducer from "./slices/nodeStylingSlice";
 import historyReducer from "./slices/historySlice";
-import { historyMiddleware } from "./middleware";
+import nodeStylingReducer from "./slices/nodeStylingSlice";
 const store = configureStore({
   reducer: {
     graph: graphReducer,
@@ -10,7 +10,7 @@ const store = configureStore({
     history: historyReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(historyMiddleware),
+    getDefaultMiddleware().concat(undoRedoMiddleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

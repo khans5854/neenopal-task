@@ -17,10 +17,6 @@ export interface Edge {
   type?: string;
 }
 
-export interface Action {
-  type: string;
-  payload: string;
-}
 export interface GraphState {
   graphData: {
     nodes: Node[];
@@ -43,4 +39,22 @@ export interface NodePosition {
 export interface HistoricalState {
   graph: GraphState;
   nodeStyling: NodeStylingState;
+}
+
+export interface TrackChanges {
+  date: string;
+  description?: string;
+  type?: string;
+  nodeName?: string;
+  color?: string;
+  action?: string;
+}
+
+export interface HistoryState {
+  // Stores previous states for undo functionality
+  past: { graph: GraphState; nodeStyling: NodeStylingState }[];
+  // Stores states that were undone for redo functionality
+  future: { graph: GraphState; nodeStyling: NodeStylingState }[];
+  // Stores track changes
+  trackChanges: TrackChanges[];
 }

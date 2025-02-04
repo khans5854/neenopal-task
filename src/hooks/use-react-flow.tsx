@@ -26,6 +26,7 @@ export const useReactFlow = () => {
   // Fetch graph data (nodes and edges) from API
   const { graphData } = useGetGraphData();
 
+  // Dispatch actions to update the graph
   const dispatch = useDispatch();
 
   // Handles node position updates in the graph

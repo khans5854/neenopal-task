@@ -1,19 +1,16 @@
-import { GraphState, NodeStylingState } from "@/utils";
+import {
+  GraphState,
+  HistoryState,
+  NodeStylingState,
+  TrackChanges,
+} from "@/utils";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-
-interface HistoryState {
-  // Stores previous states for undo functionality
-  past: { graph: GraphState; nodeStyling: NodeStylingState }[];
-  // Stores states that were undone for redo functionality
-  future: { graph: GraphState; nodeStyling: NodeStylingState }[];
-  history: { infoText: string }[];
-}
 
 const initialState: HistoryState = {
   past: [],
   future: [],
-  history: [],
+  trackChanges: [],
 };
 
 const historySlice = createSlice({
@@ -59,14 +56,21 @@ const historySlice = createSlice({
       state.past.push(action.payload);
       state.future.shift();
     },
-    pushHistory: (state, action: PayloadAction<{ infoText: string }>) => {
-      state.history.push(action.payload);
+
+    // Adds a new track change to the history
+    pushHistory: (state, action: PayloadAction<TrackChanges>) => {
+      state.trackChanges.push(action.payload);
     },
   },
 });
 
+// Actions for history slice
 export const { pushState, redoState, undoState, pushHistory } =
   historySlice.actions;
+
+// Selector to get the track changes
+export const trackChangesSelector = (state: RootState) =>
+  state.history.trackChanges;
 
 // Selector to check if undo operation is available
 export const isUndoable = (state: RootState) => state.history.past.length > 0;
